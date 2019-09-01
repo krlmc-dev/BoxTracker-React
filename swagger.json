@@ -1,0 +1,458 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "A simple API to track boxes",
+    "version" : "1.0.0",
+    "title" : "Simple Box Tracker API"
+  },
+  "schemes" : [ "https", "http" ],
+  "security" : [ {
+    "BasicAuth" : [ ]
+  } ],
+  "paths" : {
+    "/jobs" : {
+      "get" : {
+        "tags" : [ "Job" ],
+        "description" : "Returns a list of current jobs",
+        "operationId" : "GetJobs",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of current jobs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Job"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Job" ],
+        "description" : "Adds a new Job",
+        "operationId" : "AddNewJob",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Job object that needs to be added to the database",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid Input"
+          }
+        }
+      }
+    },
+    "/job/box" : {
+      "post" : {
+        "tags" : [ "Box" ],
+        "description" : "Adds a new Box",
+        "operationId" : "AddNewBox",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Box object that needs to be added to the job",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Box"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid Input"
+          }
+        }
+      }
+    },
+    "/job/{job_id}" : {
+      "get" : {
+        "tags" : [ "Job" ],
+        "description" : "Obtain information about a job from his or her unique ID",
+        "operationId" : "GetJobByID",
+        "parameters" : [ {
+          "name" : "job_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a job",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/{job_id}/{box_id}" : {
+      "get" : {
+        "tags" : [ "Job" ],
+        "description" : "Successfully return a specific box from a specific job",
+        "operationId" : "GetBoxByID",
+        "parameters" : [ {
+          "name" : "job_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "box_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Box"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers" : {
+      "get" : {
+        "tags" : [ "Customer" ],
+        "description" : "Returns a list of Customers",
+        "operationId" : "GetCustomers",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of customers",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Customer"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Customer" ],
+        "description" : "Adds a new Customer",
+        "operationId" : "AddCustomer",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Customer object that needs to be added to the database",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Customer"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid Input"
+          }
+        }
+      }
+    },
+    "/customer/{customer_id}" : {
+      "get" : {
+        "tags" : [ "Customer" ],
+        "description" : "View Customer by ID",
+        "operationId" : "ViewCustomerByID",
+        "parameters" : [ {
+          "name" : "customer_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a customer",
+            "schema" : {
+              "$ref" : "#/definitions/Customer"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login" : {
+      "post" : {
+        "tags" : [ "Login" ],
+        "description" : "Logs In User\"",
+        "operationId" : "Login",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "User Login",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid Input"
+          }
+        }
+      }
+    },
+    "/boxes" : {
+      "get" : {
+        "tags" : [ "Box" ],
+        "description" : "ViewAll Boxes",
+        "operationId" : "ViewBoxes",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned all boxes",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Box"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boxes/{box_id}" : {
+      "get" : {
+        "tags" : [ "Box" ],
+        "description" : "Successfully return a specific box by barcode/ID",
+        "operationId" : "GetBox",
+        "parameters" : [ {
+          "name" : "box_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/BoxDetail"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "BasicAuth" : {
+      "type" : "basic"
+    }
+  },
+  "definitions" : {
+    "Job" : {
+      "type" : "object",
+      "required" : [ "customer_name" ],
+      "properties" : {
+        "job_id" : {
+          "type" : "integer"
+        },
+        "customer_name" : {
+          "type" : "string"
+        },
+        "box_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BoxDetail"
+          }
+        },
+        "state" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Box" : {
+      "type" : "object",
+      "required" : [ "customer_name" ],
+      "properties" : {
+        "box_id" : {
+          "type" : "integer"
+        },
+        "customer_name" : {
+          "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BoxDetail" : {
+      "type" : "object",
+      "required" : [ "box_id" ],
+      "properties" : {
+        "box_id" : {
+          "type" : "integer"
+        },
+        "job_id" : {
+          "type" : "integer"
+        },
+        "customer_name" : {
+          "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "operator_name" : {
+          "type" : "string"
+        },
+        "box_state" : {
+          "type" : "string"
+        },
+        "box_step" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Customer" : {
+      "type" : "object",
+      "required" : [ "customer_name" ],
+      "properties" : {
+        "customer_id" : {
+          "type" : "integer"
+        },
+        "customer_name" : {
+          "type" : "string"
+        },
+        "customer_email" : {
+          "type" : "string"
+        }
+      }
+    },
+    "User" : {
+      "type" : "object",
+      "required" : [ "user_id", "user_name" ],
+      "properties" : {
+        "user_id" : {
+          "type" : "integer"
+        },
+        "user_name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_400" : {
+      "properties" : {
+        "message" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "parameters" : {
+    "PageLimit" : {
+      "name" : "limit",
+      "in" : "query",
+      "description" : "Limits the number of items on a page",
+      "required" : false,
+      "type" : "integer"
+    },
+    "PageNumber" : {
+      "name" : "offset",
+      "in" : "query",
+      "description" : "Specifies the page number of the jobs to be displayed",
+      "required" : false,
+      "type" : "integer"
+    }
+  },
+  "responses" : {
+    "400Error" : {
+      "description" : "Invalid request",
+      "schema" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}

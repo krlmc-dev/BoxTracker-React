@@ -1,0 +1,10 @@
+.customer {
+    background-color: #282c34;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    font-size: 15pt;
+    color: white;
+  }

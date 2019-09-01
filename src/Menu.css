@@ -1,0 +1,36 @@
+.Menu {
+    text-align: center;
+}
+  
+  .Menu-header {
+    background-color: #282c34;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+
+  .Menu-body {
+    background-color: #282c34;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .Menu-link {
+    color: #61dafb;
+  }
+
+  .Menu-Style {
+    background-color: #282c34;
+    margin: auto;
+    padding: 50;
+  };
+  
