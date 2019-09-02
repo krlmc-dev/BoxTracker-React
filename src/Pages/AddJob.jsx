@@ -21,7 +21,8 @@ class AddJob extends React.Component{
           user: {},
           customer_name: '',
           numBoxes:'',
-          jobLocation:'',
+          jobLocation:'Loading Dock',
+          jobDispatch:'Archive',
           submitted: false,
           loading: false
       };
@@ -42,7 +43,7 @@ class AddJob extends React.Component{
     {
         e.preventDefault();
         this.setState({ submitted: true });
-        const { customer_id, numBoxes, jobLocation, returnUrl } = this.state;
+        const { customer_id, numBoxes, jobLocation, jobDispatch, returnUrl } = this.state;
   
         // stop here if form is invalid
         if (!(numBoxes))
@@ -51,7 +52,7 @@ class AddJob extends React.Component{
         }
         this.setState({ loading: true });
         
-        this.addJob(this.props.match.params.id, numBoxes, jobLocation)
+        this.addJob(this.props.match.params.id, numBoxes, jobLocation, jobDispatch)
         .then(
             response => {
                 this.setState({loading: false});
@@ -61,10 +62,10 @@ class AddJob extends React.Component{
         var path = "/customer/"+this.props.match.params.id
         this.props.history.push(path);
     }
-  
+
   render(){
     var path = "/customer/"+this.props.match.params.id
-    const { user, customerID, numBoxes, jobLocation, submitted, loading } = this.state;
+    const { user, customerID, numBoxes, jobLocation, otherLocation, submitted, loading } = this.state;
     return (
         
         <div className="Menu">
@@ -77,7 +78,7 @@ class AddJob extends React.Component{
           <div className="content">
           <form name="form" onSubmit={this.handleSubmit}>
           <div className={'form-group' + (submitted && !customerID ? ' has-error' : '')}>
-              <label htmlFor="numBoxes">Number of Boxes:</label>
+              <label htmlFor="numBoxes">Number of Boxes:</label><br/>
               <input
                 type="text"
                 className="form-control"
@@ -85,15 +86,23 @@ class AddJob extends React.Component{
                 value={numBoxes}
                 onChange={this.handleChange} />
           </div>
-          <div className={'form-group' + (submitted && !customerID ? ' has-error' : '')}>
-              <label htmlFor="jobLocation">Location:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="jobLocation"
-                value={jobLocation}
-                onChange={this.handleChange} />
+          <div>
+            Location:<br/>
+            <select jobLocation={this.state.jobLocation} onChange={this.handleChange}>
+              <option jobLocation="Loading Dock">Loading Dock</option>
+              <option jobLocation="Front Door">Front Door</option>
+              <option jobLocation="Staging Area">Staging Area</option>
+              <option jobLocation="Workstation">Workstation</option>
+            </select>
           </div>
+          <div>
+            Dispatch Type:<br/>
+            <select jobDispatch={this.state.jobDispatch} onChange={this.handleChange}>
+              <option jobDispatch="Archive">Archive/Storage</option>
+              <option jobDispatch="Destroy">Destroy</option>
+            </select>
+          </div>
+          
           <div className="form-group">
               <button className="btn btn-primary" disabled={loading}>Create</button>
               {loading &&
@@ -107,7 +116,7 @@ class AddJob extends React.Component{
       );
     }
 
-    addJob(customer_id, job_numboxes, job_location)
+    addJob(customer_id, job_numboxes, job_location, job_dispatch)
     {
       var path = "http://localhost:52773/BoxTracker/jobs"
         const requestOptions = {
@@ -116,7 +125,7 @@ class AddJob extends React.Component{
                 'content-type': 'application/json',
                 'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
                 },
-            body: JSON.stringify({'customer_id': customer_id, 'job_numboxes': job_numboxes, 'job_location': job_location, 'operator_id':localStorage.getItem("operator_id")})
+            body: JSON.stringify({'customer_id': customer_id, 'job_numboxes': job_numboxes, 'job_location': job_location, 'operator_id':localStorage.getItem("operator_id"), 'job_dispatch': job_dispatch})
             };
         return fetch(path, requestOptions)
         .then(this.handleResponse).then(response => {
