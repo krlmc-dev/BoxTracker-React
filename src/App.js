@@ -12,6 +12,8 @@ import ViewJobs from './Pages/ViewJobs';
 import LoginForm from './Pages/LoginForm';
 import LoggedOut from './Pages/LoggedOut';
 import ScanBarcode from './Pages/ScanBarcode';
+import EditBox from './Pages/EditBox';
+import TaskList from './Pages/TaskList';
 
 import "./index.css";
 
@@ -47,6 +49,8 @@ class App extends React.Component {
                         <PrivateRoute path="/customer/:id" component={ViewCustomer} />
                         <PrivateRoute path="/job/:id" component={ViewJob} />
                         <PrivateRoute path="/boxes" component={ScanBarcode} />
+                        <PrivateRoute path="/box/:id" component={EditBox}/>
+                        <PrivateRoute path="/tasks" component={TaskList}/>
                         
                 </div>
             </HashRouter>

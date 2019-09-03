@@ -320,6 +320,30 @@
           }
         }
       }
+    },
+    "/tasks" : {
+      "get" : {
+        "tags" : [ "Tasks" ],
+        "description" : "Returns all tasks",
+        "operationId" : "getTasks",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions" : {

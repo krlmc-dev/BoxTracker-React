@@ -41,27 +41,44 @@ class ScanBarcode extends React.Component{
       };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    
+    this.renderEditable = this.renderEditable.bind(this);
   }
   componentDidMount()
   {
-    ReactDOM.findDOMNode(this.refs.divFocus).focus();
+      this.getBox(this.props.match.params.id)
   }
 
-  handleChange(e) {
-    this.setState({value: e.target.value});
-  }
+  handleChange(e) 
+    {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    }
 
     handleSubmit(e) {
-      this.getBox(this.state.value)
-      this.setState({value: ""});
       e.preventDefault();
       
     }
     
 
+    renderEditable(cellInfo) {
+        return (
+          <div
+            style={{ backgroundColor: "black" }}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={e => {
+              const box = [...this.state.box];
+              box[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+              this.setState({ box });
+            }}
+            dangerouslySetInnerHTML={{
+              __html: this.state.box[cellInfo.index][cellInfo.column.id]
+            }}
+          />
+        );
+      }
   render(){
-    const { box, boxID} = this.state
+    const { box, boxID, loading} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -81,29 +98,7 @@ class ScanBarcode extends React.Component{
             <header className="Menu-header">
             <h1>Box Tracker</h1>
           </header>
-          <form onSubmit={this.handleSubmit}>
-          <label>
-           Scan Barcode:
-           <br/>
-            <input type="text" ref="divFocus" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          </form>
-          <ReactTable
-          getTrGroupProps={(state, rowInfo) => {
-            if (rowInfo !== undefined) {
-              return {
-                  onClick: () => {
-                    var path = "/box/"+rowInfo.row.box_id
-                    this.props.history.push(path);
-                  },
-                  style: {
-                      cursor: 'pointer',
-                      background: rowInfo.original.id === this.state.selectedIndex ? '#00afec' : 'white',
-                      color: rowInfo.original.id === this.state.selectedIndex ? 'white' : 'black'
-                              }
-                          }
-                    }}
-                }
+          <ReactTable 
           data={box}
           columns={[
             {
@@ -123,7 +118,9 @@ class ScanBarcode extends React.Component{
                 },
                 {
                   Header: "Location",
-                  accessor: "box_location"
+                  accessor: "box_location",
+                  Cell: this.renderEditable
+                  
                 },
                 {
                   Header: "Operator",
@@ -131,11 +128,13 @@ class ScanBarcode extends React.Component{
                 },
                 {
                   Header: "Step",
-                  accessor: "box_step"
+                  accessor: "box_step",
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "State",
-                  accessor: "box_state"
+                  accessor: "box_state",
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Dispatch",
@@ -149,14 +148,18 @@ class ScanBarcode extends React.Component{
         >
            {(state, makeTable, instance) => {
               return (
-                
                 <div>
                   {makeTable()}
                 </div>
               )
             }}
           </ReactTable>
-          
+          <div>
+              <button className="btn btn-primary" disabled={loading} onClick={()=>this.updateBox()}>Update</button>
+              {loading &&
+                  <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+              }
+          </div>
         </div>
       );
     }
@@ -189,6 +192,21 @@ getBox(boxID)
             }
             return response;
         });
+}
+
+updateBox()
+{
+    const {box} = this.state
+    box.map((data, i) => {
+      let tBox = {
+        box_location : data.box_location,
+        box_step : data.box_step,
+        box_state : data.box_state
+      }
+      alert("Box Updated: "+JSON.stringify(tBox))
+    })
+    
+   
 }
 
 handleResponse(response) {
