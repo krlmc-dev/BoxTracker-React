@@ -1,11 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
-import { Button, TextField}  from '@material-ui/core';
 import ConfirmDialogue from './ConfirmDialogue';
-import { Route, Link, HashRouter} from 'react-router-dom';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
 import '../Menu.css';
 import '../customers.css';
 
@@ -21,43 +17,58 @@ class Preparation extends React.Component{
       };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderEditable = this.renderEditable.bind(this);
   }
+
+  //called first time component loads
   componentDidMount()
   {
       this.getBox(this.props.match.params.id)
-     // ReactDOM.findDOMNode(this.refs.focusButton).focus();
   }
 
+  //called when input changed
   handleChange(e) 
     {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
 
-    handleSubmit(e) {
-      e.preventDefault();
-      
-    }
-    
+  //called when input submitted
+  handleSubmit(e)
+  {
+    e.preventDefault();
+  }
+  
+  /*
+    Used to transform JSON from a format suitable for a borizontal table
+    to a format suitable for a vertical table
+  */ 
+  getVertical(vBox)
+  {
+    let newBox = []
+    vBox.map((data, i) => {
+        newBox = [
+            {"Property": "Box ID",
+             "Value": data.box_id},
+             {"Property": "Job ID",
+             "Value": data.job_id},
+             {"Property": "Customer",
+             "Value": data.customer_name},
+             {"Property": "Location",
+             "Value": data.box_location},
+             {"Property": "Operator",
+             "Value": data.box_operator},
+             {"Property": "State",
+             "Value": data.box_state},
+             {"Property": "Step",
+             "Value": data.box_step},
+             {"Property": "Dispatch",
+             "Value": data.job_dispatch}
+        ]
+    })
+    return newBox
+  }
 
-    renderEditable(cellInfo) {
-        return (
-          <div
-            style={{ backgroundColor: "black" }}
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={e => {
-              const box = [...this.state.box];
-              box[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-              this.setState({ box });
-            }}
-            dangerouslySetInnerHTML={{
-              __html: this.state.box[cellInfo.index][cellInfo.column.id]
-            }}
-          />
-        );
-      }
+  //renders component on webpage
   render(){
     const { vBox, boxID, loading} = this.state
     var menuStyle = {
@@ -112,17 +123,15 @@ class Preparation extends React.Component{
         </div>
       );
     }
-///
-/// HTTP GET/POST METHODS
-///
+/*
+  HTTP GET/POST METHODS
+*/
+
+//gets a single box by box ID
 getBox(boxID)
 {
     if(boxID=="$36"){boxID=6}
-    //alert(boxID)
-    //boxID = 6
     var path = "http://localhost:52773/BoxTracker/boxes/"+boxID
-    //TEMPORARY
-    //jobID = "1"
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -134,7 +143,6 @@ getBox(boxID)
         .then(this.handleGetResponse)
         .then(response => {
             if (response) {
-              //alert(JSON.stringify(response))
               let vBox = this.getVertical(response)
               this.setState({
                   vBox : vBox,
@@ -145,45 +153,10 @@ getBox(boxID)
         });
 }
 
-getVertical(vBox)
-{
-    let newBox = []
-    vBox.map((data, i) => {
-        newBox = [
-            {"Property": "Box ID",
-             "Value": data.box_id},
-             {"Property": "Job ID",
-             "Value": data.job_id},
-             {"Property": "Customer",
-             "Value": data.customer_name},
-             {"Property": "Location",
-             "Value": data.box_location},
-             {"Property": "Operator",
-             "Value": data.box_operator},
-             {"Property": "State",
-             "Value": data.box_state},
-             {"Property": "Step",
-             "Value": data.box_step},
-             {"Property": "Dispatch",
-             "Value": data.job_dispatch}
-        ]
-    })
-    return newBox
-}
-
-updateBox()
-{
-    const {box} = this.state
-    box.map((data, i) => {
-      let tBox = {
-        box_location : data.box_location,
-        box_step : data.box_step,
-        box_state : data.box_state
-      }
-      alert("Box Updated: "+JSON.stringify(tBox))
-    })
-}
-
+/*
+  called when user presses 'yes' on 'Are You Sure' dialogue
+  updates task status and box details
+*/
 completeStep()
 {
     alert("Completed")
@@ -191,6 +164,7 @@ completeStep()
     this.props.history.push(path);
 }
 
+//handles response from POST HTTP requests
 handleResponse(response) {
     
     return response.text().then(text => {
@@ -209,6 +183,7 @@ handleResponse(response) {
     });
 }
 
+//handles response from GET HTTP requests
 handleGetResponse(response) {
     
     return response.text().then(text => {
