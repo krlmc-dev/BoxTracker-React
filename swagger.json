@@ -239,7 +239,7 @@
     "/login" : {
       "post" : {
         "tags" : [ "Login" ],
-        "description" : "Logs In User\"",
+        "description" : "Logs In User",
         "operationId" : "Login",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -373,6 +373,29 @@
           }
         }
       }
+    },
+    "/task" : {
+      "post" : {
+        "tags" : [ "Tasks" ],
+        "description" : "Updates Task / Box status",
+        "operationId" : "updateTask",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "<strong>Task</strong> ID and Action",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid Input"
+          }
+        }
+      }
     }
   },
   "securityDefinitions" : {
@@ -474,6 +497,16 @@
     "inline_response_400" : {
       "properties" : {
         "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body" : {
+      "properties" : {
+        "taskID" : {
+          "type" : "string"
+        },
+        "taskAction" : {
           "type" : "string"
         }
       }
