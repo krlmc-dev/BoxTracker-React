@@ -1,7 +1,23 @@
 .Menu {
     text-align: center;
+    background-color: grey
 }
-  
+  .MenuPrep {
+    text-align: center;
+    background-color: seagreen
+  }
+  .MenuScan {
+    text-align: center;
+    background-color: steelblue
+  }
+  .MenuQC {
+    text-align: center;
+    background-color: peru
+  }
+  .MenuDispatch {
+    text-align: center;
+    background-color: maroon
+  }
   .Menu-header {
     background-color: #282c34;
     min-height: 10vh;
@@ -33,4 +49,3 @@
     margin: auto;
     padding: 50;
   };
-  

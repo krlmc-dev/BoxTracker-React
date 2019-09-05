@@ -14,6 +14,11 @@ import LoggedOut from './Pages/LoggedOut';
 import ScanBarcode from './Pages/ScanBarcode';
 import EditBox from './Pages/EditBox';
 import TaskList from './Pages/TaskList';
+import Task from './Pages/Task';
+import Preparation from './Pages/Preparation';
+import Scanning from './Pages/Scanning';
+import QualityControl from './Pages/QualityControl';
+import Dispatch from './Pages/Dispatch';
 
 import "./index.css";
 
@@ -28,9 +33,11 @@ class App extends React.Component {
     render() {
         
         return (
+            <div >
             <HashRouter>
                 <ul className = "header">
                     <li><NavLink exact to='/'>Home</NavLink></li>
+                    <li><NavLink to='/tasks'>Tasks</NavLink></li>
                     <li><NavLink to='/boxes'>Box</NavLink></li>
                     <li><NavLink to='/addcustomer'>Add Customer</NavLink></li>
                     <li><NavLink to='/customers'>View Customers</NavLink></li>
@@ -42,18 +49,24 @@ class App extends React.Component {
                         <PrivateRoute exact path="/" component={Home} />
                         <Route path="/login" component={LoginForm} />
                         <Route path="/logout" component={LoggedOut} />                        
-                        <PrivateRoute path="/addcustomer" component={AddCustomer} />
+                        <PrivateRoute path="/addCustomer" component={AddCustomer} />
                         <PrivateRoute path="/customers" component={ViewCustomers} />
                         <PrivateRoute path="/jobs" component={ViewJobs}/>
-                        <PrivateRoute path="/addjob/:id" component={AddJob} />
+                        <PrivateRoute path="/addJob/:id" component={AddJob} />
                         <PrivateRoute path="/customer/:id" component={ViewCustomer} />
                         <PrivateRoute path="/job/:id" component={ViewJob} />
                         <PrivateRoute path="/boxes" component={ScanBarcode} />
-                        <PrivateRoute path="/box/:id" component={EditBox}/>
+                        <PrivateRoute exact path="/box/:id" component={EditBox}/>
                         <PrivateRoute path="/tasks" component={TaskList}/>
+                        <PrivateRoute path="/task/:id" component={Task}/>
+                        <PrivateRoute path="/box/:id/preparation" component={Preparation}/>
+                        <PrivateRoute path="/box/:id/scanning" component={Scanning}/>
+                        <PrivateRoute path="/box/:id/qualityControl" component={QualityControl}/>
+                        <PrivateRoute path="/box/:id/dispatch" component={Dispatch}/>
                         
                 </div>
             </HashRouter>
+            </div>
             
         );
     }

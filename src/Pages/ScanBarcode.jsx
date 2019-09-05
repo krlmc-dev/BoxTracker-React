@@ -1,32 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
 import { Route, Link, HashRouter} from 'react-router-dom';
 import "react-table/react-table.css";
 import JSONTree from 'react-json-tree'
+
+import ContinueDialogue from './ContinueDialogue';
+
 import '../Menu.css';
 import '../customers.css';
-
-const JSONtheme = {
-  scheme: 'monokai',
-  author: 'wimer hazenberg (http://www.monokai.nl)',
-  base00: '#272822',
-  base01: '#383830',
-  base02: '#49483e',
-  base03: '#75715e',
-  base04: '#a59f85',
-  base05: '#f8f8f2',
-  base06: '#f5f4f1',
-  base07: '#f9f8f5',
-  base08: '#f92672',
-  base09: '#fd971f',
-  base0A: '#f4bf75',
-  base0B: '#a6e22e',
-  base0C: '#a1efe4',
-  base0D: '#66d9ef',
-  base0E: '#ae81ff',
-  base0F: '#cc6633'
-}
 
 class ScanBarcode extends React.Component{
   constructor(props)
@@ -38,6 +22,9 @@ class ScanBarcode extends React.Component{
           user: {},
           box: [],
           loading: false,
+          go: false,
+          show: false,
+          isShown: false
       };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,7 +32,19 @@ class ScanBarcode extends React.Component{
   }
   componentDidMount()
   {
-    ReactDOM.findDOMNode(this.refs.divFocus).focus();
+    //ReactDOM.findDOMNode(this.refs.divFocus).focus();
+  }
+
+  componentDidUpdate()
+  {
+    const {go, box, show, isShown} = this.state
+    if(go){this.goStep()}
+    if(isShown && !show){
+      this.setState({
+        isShown:false,
+        box: []
+      })
+    }
   }
 
   handleChange(e) {
@@ -54,14 +53,33 @@ class ScanBarcode extends React.Component{
 
     handleSubmit(e) {
       this.getBox(this.state.value)
-      this.setState({value: ""});
+      this.setState({
+        value: "",
+        go: true
+      })
       e.preventDefault();
-      
     }
     
+  goStep()
+  {
+    const {box, show, isShown} = this.state
+    box.map((data, i) => {
+      let step = data.box_step
+      //if current workstation = the step the box is up to, continue
+      alert(localStorage.getItem("Workstation")+step)
+      if(localStorage.getItem("Workstation")==step){
+        var path = "/box/"+data.box_id+"/"+step
+        this.props.history.push(path);
+      }
+      else
+      {
+        if(!isShown){this.setState({show:true, isShown:true})}
+      }
+    })
+  }
 
   render(){
-    const { box, boxID} = this.state
+    const { show, isShown, box, boxID} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -74,19 +92,20 @@ class ScanBarcode extends React.Component{
         padding: 20,
         overflow: 'auto',
       };
-    
     return (
         
         <div className="Menu">
+          {show && <ContinueDialogue onClick={(e)=>{
+            this.setState({show:false})
+              alert(e.currentTarget.id)
+          }}/>}
             <header className="Menu-header">
             <h1>Box Tracker</h1>
           </header>
           <form onSubmit={this.handleSubmit}>
-          <label>
-           Scan Barcode:
            <br/>
-            <input type="text" ref="divFocus" value={this.state.value} onChange={this.handleChange} />
-          </label>
+           <label for="barcode-input">Scan Barcode</label>
+            <TextField autoFocus  value={this.state.value} onChange={this.handleChange} />
           </form>
           <ReactTable
           getTrGroupProps={(state, rowInfo) => {
@@ -156,7 +175,6 @@ class ScanBarcode extends React.Component{
               )
             }}
           </ReactTable>
-          
         </div>
       );
     }

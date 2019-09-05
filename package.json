@@ -4,7 +4,9 @@
   "private": true,
   "proxy": "http://localhost:52773",
   "dependencies": {
+    "@material-ui/core": "^4.4.0",
     "iris-app": "^0.2.0",
+    "material-ui": "^0.20.2",
     "rc-menu": "^7.4.23",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

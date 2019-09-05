@@ -92,7 +92,6 @@ class AddJob extends React.Component{
               <option jobLocation="Loading Dock">Loading Dock</option>
               <option jobLocation="Front Door">Front Door</option>
               <option jobLocation="Staging Area">Staging Area</option>
-              <option jobLocation="Workstation">Workstation</option>
             </select>
           </div>
           <div>

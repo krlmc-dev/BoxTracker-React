@@ -6,26 +6,6 @@ import '../Menu.css';
 import '../customers.css';
 import '../index.css';
 
-const JSONtheme = {
-  scheme: 'monokai',
-  author: 'wimer hazenberg (http://www.monokai.nl)',
-  base00: '#272822',
-  base01: '#383830',
-  base02: '#49483e',
-  base03: '#75715e',
-  base04: '#a59f85',
-  base05: '#f8f8f2',
-  base06: '#f5f4f1',
-  base07: '#f9f8f5',
-  base08: '#f92672',
-  base09: '#fd971f',
-  base0A: '#f4bf75',
-  base0B: '#a6e22e',
-  base0C: '#a1efe4',
-  base0D: '#66d9ef',
-  base0E: '#ae81ff',
-  base0F: '#cc6633'
-}
 
 class TaskList extends React.Component{
   constructor(props)
@@ -46,7 +26,7 @@ class TaskList extends React.Component{
   }
   componentWillMount()
   {
-    this.getCustomers()
+    this.getTasks()
   }
 
     handleChange(e) 
@@ -65,7 +45,21 @@ class TaskList extends React.Component{
             <p>View Tasks</p>
           </header>
           <ReactTable
-
+            getTrGroupProps={(state, rowInfo) => {
+                if (rowInfo !== undefined) {
+                  return {
+                      onClick: () => {
+                        var path = "/box/"+rowInfo.row.subject+"/"+this.parseStep(rowInfo.row.message)
+                        this.props.history.push(path);
+                      },
+                      style: {
+                          cursor: 'pointer',
+                          background: rowInfo.original.id === this.state.selectedIndex ? '#00afec' : 'white',
+                          color: rowInfo.original.id === this.state.selectedIndex ? 'white' : 'black'
+                                  }
+                              }
+                        }}
+                    }
           data={tasks}
           columns={[
             {
@@ -104,7 +98,7 @@ class TaskList extends React.Component{
       );
     }
 
-    getCustomers()
+    getTasks()
 {
     const requestOptions = {
         method: 'GET',
@@ -121,6 +115,13 @@ class TaskList extends React.Component{
             }
             return response;
         });
+}
+parseStep(msg)
+{
+  if(msg="Preparation"){return "preparation"}
+  if(msg="Scanning"){return "scanning"}
+  if(msg="Quality Control"){return "qualityControl"}
+  if(msg="Dispatch"){return "dispatch"}
 }
 
 handleGetResponse(response) {

@@ -112,6 +112,7 @@ handleSubmit(e)
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('operator_id', user.user_id);
                 localStorage.setItem('operator_name', user.user_name);
+                localStorage.setItem('Workstation', "Preparation")
                 //alert("Logged In!")
             }
 
