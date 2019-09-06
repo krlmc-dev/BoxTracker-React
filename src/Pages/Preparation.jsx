@@ -13,6 +13,7 @@ class Preparation extends React.Component{
       this.state = {
           user: {},
           box: [],
+          taskID: "",
           loading: false
       };
     this.handleChange = this.handleChange.bind(this);
@@ -154,14 +155,32 @@ getBox(boxID)
 }
 
 /*
-  called when user presses 'yes' on 'Are You Sure' dialogue
-  updates task status and box details
+  Called when user presses "completed", and then 'yes' on the 'Are You Sure' dialogue.
+  Updates task status and box details.
 */
 completeStep()
 {
-    alert("Completed")
-    var path = "/boxes"
-    this.props.history.push(path);
+
+  var path = "http://localhost:52773/BoxTracker/task"
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            },
+        body: JSON.stringify({'task_id': this.state.taskID, 'task_action': "Completed", 'box_location': "Workstation", "box_operator": localStorage.getItem("operator_id"), "box_step":"Scanning"})
+        };
+    return fetch(path, requestOptions)
+    .then(this.handleResponse).then(response => {
+            if(response)
+            {   
+              alert("Completed")
+              var path = "/boxes"
+              this.props.history.push(path);
+            }
+            return response;
+        }
+    )
 }
 
 //handles response from POST HTTP requests

@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
 import { Button, TextField}  from '@material-ui/core';
-import ConfirmDialogue from './ConfirmDialogue';
+import QCApproveDialogue from './QCApproveDialogue';
+import QCRejectDialogue from './QCRejectDialogue';
 import { Route, Link, HashRouter} from 'react-router-dom';
 import "react-table/react-table.css";
 import JSONTree from 'react-json-tree'
@@ -17,7 +18,8 @@ export default class QualityControl extends React.Component{
       this.state = {
           user: {},
           box: [],
-          loading: false
+          loading: false,
+          boxID: ""
       };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -87,7 +89,8 @@ export default class QualityControl extends React.Component{
             }}
           </ReactTable>
           <div>
-              <ConfirmDialogue onClick={()=>this.completeStep()}/>
+              <QCApproveDialogue onClick={()=>this.completeStepApprove()}/>
+              <QCRejectDialogue onClick={()=>this.completeStepReject()}/>
           </div>
         </div>
       );
@@ -129,6 +132,7 @@ getVertical(vBox)
 {
     let newBox = []
     vBox.map((data, i) => {
+        this.setState({boxID: data.box_id})
         newBox = [
             {"Property": "Box ID",
              "Value": data.box_id},
@@ -151,24 +155,51 @@ getVertical(vBox)
     return newBox
 }
 
-updateBox()
+completeStepApprove()
 {
-    const {box} = this.state
-    box.map((data, i) => {
-      let tBox = {
-        box_location : data.box_location,
-        box_step : data.box_step,
-        box_state : data.box_state
-      }
-      alert("Box Updated: "+JSON.stringify(tBox))
-    })
+    var path = "http://localhost:52773/BoxTracker/task"
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            },
+        body: JSON.stringify({'box_id': this.state.boxID, 'task_action': "Approve", 'box_location': "Workstation", "box_operator": localStorage.getItem("operator_id"), "box_step":"Dispatch"})
+        };
+    return fetch(path, requestOptions)
+    .then(this.handleResponse).then(response => {
+            if(response)
+            {   
+              alert("Accepted")
+              var path = "/boxes"
+              this.props.history.push(path);
+            }
+            return response;
+        }
+    )
 }
-
-completeStep()
+completeStepReject()
 {
-    alert("Completed")
-    var path = "/boxes"
-    this.props.history.push(path);
+  var path = "http://localhost:52773/BoxTracker/task"
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            },
+        body: JSON.stringify({'box_id': this.state.boxID, 'task_action': "Reject", 'box_location': "Workstation", "box_operator": localStorage.getItem("operator_id"), "box_step":"Scanning"})
+        };
+    return fetch(path, requestOptions)
+    .then(this.handleResponse).then(response => {
+            if(response)
+            {   
+              alert("Rejected")
+              var path = "/boxes"
+              this.props.history.push(path);
+            }
+            return response;
+        }
+    )
 }
 
 handleResponse(response) {

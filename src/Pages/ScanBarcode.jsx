@@ -66,7 +66,6 @@ class ScanBarcode extends React.Component{
     box.map((data, i) => {
       let step = data.box_step
       //if current workstation = the step the box is up to, continue
-      alert(localStorage.getItem("Workstation")+step)
       if(localStorage.getItem("Workstation")==step){
         var path = "/box/"+data.box_id+"/"+step
         this.props.history.push(path);

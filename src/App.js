@@ -61,7 +61,7 @@ class App extends React.Component {
                         <PrivateRoute path="/task/:id" component={Task}/>
                         <PrivateRoute path="/box/:id/preparation" component={Preparation}/>
                         <PrivateRoute path="/box/:id/scanning" component={Scanning}/>
-                        <PrivateRoute path="/box/:id/qualityControl" component={QualityControl}/>
+                        <PrivateRoute path="/box/:id/Quality Control" component={QualityControl}/>
                         <PrivateRoute path="/box/:id/dispatch" component={Dispatch}/>
                         
                 </div>

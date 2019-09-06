@@ -17,7 +17,9 @@ export default class Dispatch extends React.Component{
       this.state = {
           user: {},
           box: [],
-          loading: false
+          loading: false,
+          boxID:"",
+          boxDispatch:""
       };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -129,6 +131,10 @@ getVertical(vBox)
 {
     let newBox = []
     vBox.map((data, i) => {
+        this.setState({
+          boxID: data.box_id,
+          boxDispatch: data.job_dispatch
+        })
         newBox = [
             {"Property": "Box ID",
              "Value": data.box_id},
@@ -166,9 +172,27 @@ updateBox()
 
 completeStep()
 {
-    alert("Completed")
-    var path = "/boxes"
-    this.props.history.push(path);
+
+  var path = "http://localhost:52773/BoxTracker/task"
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            },
+        body: JSON.stringify({'box_id': this.state.boxID, 'task_action': "Completed", 'box_location': this.state.boxDispatch, "box_operator": localStorage.getItem("operator_id"), "box_step":"Completed"})
+        };
+    return fetch(path, requestOptions)
+    .then(this.handleResponse).then(response => {
+            if(response)
+            {   
+              alert("Completed")
+              var path = "/boxes"
+              this.props.history.push(path);
+            }
+            return response;
+        }
+    )
 }
 
 handleResponse(response) {
