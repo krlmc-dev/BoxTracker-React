@@ -13,7 +13,7 @@ class Preparation extends React.Component{
       this.state = {
           user: {},
           box: [],
-          taskID: "",
+          boxID: "",
           loading: false
       };
     this.handleChange = this.handleChange.bind(this);
@@ -47,6 +47,7 @@ class Preparation extends React.Component{
   {
     let newBox = []
     vBox.map((data, i) => {
+        this.setState({boxID: data.box_id})
         newBox = [
             {"Property": "Box ID",
              "Value": data.box_id},
@@ -168,7 +169,7 @@ completeStep()
             'content-type': 'application/json',
             'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
             },
-        body: JSON.stringify({'task_id': this.state.taskID, 'task_action': "Completed", 'box_location': "Workstation", "box_operator": localStorage.getItem("operator_id"), "box_step":"Scanning"})
+        body: JSON.stringify({'box_id': this.state.boxID, 'task_action': "Completed", 'box_location': "Workstation", "box_operator": localStorage.getItem("operator_id"), "box_step":"Scanning"})
         };
     return fetch(path, requestOptions)
     .then(this.handleResponse).then(response => {
