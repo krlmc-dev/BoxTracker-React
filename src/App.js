@@ -19,6 +19,8 @@ import Preparation from './Pages/Preparation';
 import Scanning from './Pages/Scanning';
 import QualityControl from './Pages/QualityControl';
 import Dispatch from './Pages/Dispatch';
+import Dashboard from './Pages/Dashboard';
+import ViewBox from './Pages/ViewBox';
 
 import "./index.css";
 
@@ -37,14 +39,14 @@ class App extends React.Component {
             <HashRouter>
                 <ul className = "header">
                     <li><NavLink exact to='/'>Home</NavLink></li>
-                    <li><NavLink to='/tasks'>Tasks</NavLink></li>
-                    <li><NavLink to='/boxes'>Box</NavLink></li>
+                    {/*<li><NavLink to='/tasks'>Tasks</NavLink></li>*/}
+                    <li><NavLink to='/box'>Box</NavLink></li>
                     <li><NavLink to='/addcustomer'>Add Customer</NavLink></li>
                     <li><NavLink to='/customers'>View Customers</NavLink></li>
                     <li><NavLink to='/jobs'>View Jobs</NavLink></li>
+                    <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
                     <li><NavLink to='/logout'>Log Out</NavLink></li>
                 </ul>
-                <div align='center'>{localStorage.getItem("operator_name")}</div>
                 <div>
                         <PrivateRoute exact path="/" component={Home} />
                         <Route path="/login" component={LoginForm} />
@@ -55,7 +57,7 @@ class App extends React.Component {
                         <PrivateRoute path="/addJob/:id" component={AddJob} />
                         <PrivateRoute path="/customer/:id" component={ViewCustomer} />
                         <PrivateRoute path="/job/:id" component={ViewJob} />
-                        <PrivateRoute path="/boxes" component={ScanBarcode} />
+                        <PrivateRoute path="/box" component={ScanBarcode} />
                         <PrivateRoute exact path="/box/:id" component={EditBox}/>
                         <PrivateRoute path="/tasks" component={TaskList}/>
                         <PrivateRoute path="/task/:id" component={Task}/>
@@ -63,6 +65,8 @@ class App extends React.Component {
                         <PrivateRoute path="/box/:id/scanning" component={Scanning}/>
                         <PrivateRoute path="/box/:id/Quality Control" component={QualityControl}/>
                         <PrivateRoute path="/box/:id/dispatch" component={Dispatch}/>
+                        <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+                        <PrivateRoute path="/dashboard/:id" component={ViewBox}/>
                         
                 </div>
             </HashRouter>
