@@ -18,6 +18,10 @@
     text-align: center;
     background-color: maroon
   }
+  .MenuDash {
+    text-align: center;
+    background-color: darkorchid
+  }
   .Menu-header {
     background-color: #282c34;
     min-height: 10vh;
