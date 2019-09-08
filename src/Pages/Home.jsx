@@ -49,7 +49,7 @@ class Home extends React.Component{
                 <ul className>
                     <li><NavLink to='/box/7/preparation'>Preparation</NavLink></li>
                     <li><NavLink to='/box/7/scanning'>Scanning</NavLink></li>
-                    <li><NavLink to='/box/7/qualityControl'>Quality Control</NavLink></li>
+                    <li><NavLink to='/box/7/Quality Control'>Quality Control</NavLink></li>
                     <li><NavLink to='/box/7/dispatch'>Dispatch</NavLink></li>
                     
                 </ul>
