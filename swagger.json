@@ -396,6 +396,35 @@
           }
         }
       }
+    },
+    "/boxes/{box_id}/stats" : {
+      "get" : {
+        "tags" : [ "Box" ],
+        "description" : "Returns Box Statistics by Box ID",
+        "operationId" : "GetBoxStats",
+        "parameters" : [ {
+          "name" : "box_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions" : {
