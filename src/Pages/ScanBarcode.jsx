@@ -1,16 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactTable from 'react-table';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
-import { Route, Link, HashRouter} from 'react-router-dom';
+import React from 'react';
+import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-
+import '../customers.css';
+import '../Menu.css';
 import ContinueDialogue from './ContinueDialogue';
 
-import '../Menu.css';
-import '../customers.css';
+
 
 class ScanBarcode extends React.Component{
   constructor(props)

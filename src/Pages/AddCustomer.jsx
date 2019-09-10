@@ -1,9 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Redirect} from 'react-router-dom';
-import '../Menu.css';
 import '../index.css';
-import ViewCustomers from './ViewCustomers';
+import '../Menu.css';
 
 class AddCustomer extends React.Component{
   constructor(props)

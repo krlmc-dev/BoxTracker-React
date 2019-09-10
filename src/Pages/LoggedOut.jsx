@@ -1,6 +1,6 @@
 import React from 'react';
-import userService from '../Services/userService';
 import '../Menu.css';
+import userService from '../Services/userService';
 
 class LoggedOut extends React.Component{
   constructor(props)

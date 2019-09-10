@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-import '../Menu.css';
 import '../customers.css';
 import '../index.css';
+import '../Menu.css';
 
 const JSONtheme = {
   scheme: 'monokai',

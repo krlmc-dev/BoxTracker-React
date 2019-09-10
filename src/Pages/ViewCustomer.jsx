@@ -1,11 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Route, NavLink, HashRouter} from 'react-router-dom';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-import '../Menu.css';
 import '../customers.css';
+import '../Menu.css';
 
 const JSONtheme = {
   scheme: 'monokai',
