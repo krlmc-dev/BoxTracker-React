@@ -397,7 +397,7 @@
         }
       }
     },
-    "/boxes/{box_id}/stats" : {
+    "/boxes/stats/{box_id}" : {
       "get" : {
         "tags" : [ "Box" ],
         "description" : "Returns Box Statistics by Box ID",
@@ -408,6 +408,30 @@
           "required" : true,
           "type" : "string"
         } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats" : {
+      "get" : {
+        "tags" : [ "Stats" ],
+        "description" : "Returns overall Production statistics",
+        "operationId" : "GetAllStats",
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "OK"
