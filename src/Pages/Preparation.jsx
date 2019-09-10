@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import ConfirmDialogue from './ConfirmDialogue';
 import "react-table/react-table.css";
-import '../Menu.css';
 import '../customers.css';
+import '../Menu.css';
+import ConfirmDialogue from './ConfirmDialogue';
 
 class Preparation extends React.Component{
   constructor(props)
@@ -108,7 +108,8 @@ class Preparation extends React.Component{
               ]
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={8}
+          showPagination = {false}
           className="-striped -highlight"
         >
            {(state, makeTable, instance) => {
@@ -176,7 +177,7 @@ completeStep()
             if(response)
             {   
               alert("Completed")
-              var path = "/boxes"
+              var path = "/box"
               this.props.history.push(path);
             }
             return response;

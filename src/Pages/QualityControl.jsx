@@ -1,14 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
-import { Button, TextField}  from '@material-ui/core';
+import "react-table/react-table.css";
+import '../customers.css';
+import '../Menu.css';
 import QCApproveDialogue from './QCApproveDialogue';
 import QCRejectDialogue from './QCRejectDialogue';
-import { Route, Link, HashRouter} from 'react-router-dom';
-import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-import '../Menu.css';
-import '../customers.css';
 
 export default class QualityControl extends React.Component{
   constructor(props)
@@ -77,7 +73,8 @@ export default class QualityControl extends React.Component{
               ]
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={8}
+          showPagination = {false}
           className="-striped -highlight"
         >
            {(state, makeTable, instance) => {
@@ -171,7 +168,7 @@ completeStepApprove()
             if(response)
             {   
               alert("Accepted")
-              var path = "/boxes"
+              var path = "/box"
               this.props.history.push(path);
             }
             return response;
@@ -194,7 +191,7 @@ completeStepReject()
             if(response)
             {   
               alert("Rejected")
-              var path = "/boxes"
+              var path = "/box"
               this.props.history.push(path);
             }
             return response;
