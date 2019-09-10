@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, NavLink, HashRouter} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute'
-
 import Home from './Pages/Home';
 import AddCustomer from './Pages/AddCustomer';
 import ViewCustomers from './Pages/ViewCustomers';
@@ -12,7 +11,6 @@ import ViewJobs from './Pages/ViewJobs';
 import LoginForm from './Pages/LoginForm';
 import LoggedOut from './Pages/LoggedOut';
 import ScanBarcode from './Pages/ScanBarcode';
-import EditBox from './Pages/EditBox';
 import TaskList from './Pages/TaskList';
 import Task from './Pages/Task';
 import Preparation from './Pages/Preparation';
@@ -57,14 +55,13 @@ class App extends React.Component {
                         <PrivateRoute path="/addJob/:id" component={AddJob} />
                         <PrivateRoute path="/customer/:id" component={ViewCustomer} />
                         <PrivateRoute path="/job/:id" component={ViewJob} />
-                        <PrivateRoute path="/box" component={ScanBarcode} />
-                        <PrivateRoute exact path="/box/:id" component={EditBox}/>
+                        <PrivateRoute exact path="/box" component={ScanBarcode} />
                         <PrivateRoute path="/tasks" component={TaskList}/>
                         <PrivateRoute path="/task/:id" component={Task}/>
-                        <PrivateRoute path="/box/:id/preparation" component={Preparation}/>
-                        <PrivateRoute path="/box/:id/scanning" component={Scanning}/>
-                        <PrivateRoute path="/box/:id/Quality Control" component={QualityControl}/>
-                        <PrivateRoute path="/box/:id/dispatch" component={Dispatch}/>
+                        <PrivateRoute exact path="/box/:id/preparation" component={Preparation}/>
+                        <PrivateRoute exact path="/box/:id/scanning" component={Scanning}/>
+                        <PrivateRoute exact path="/box/:id/Quality Control" component={QualityControl}/>
+                        <PrivateRoute exact path="/box/:id/dispatch" component={Dispatch}/>
                         <PrivateRoute exact path="/dashboard" component={Dashboard}/>
                         <PrivateRoute path="/dashboard/:id" component={ViewBox}/>
                         
