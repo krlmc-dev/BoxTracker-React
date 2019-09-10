@@ -1,16 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
-import { Route, Link, HashRouter} from 'react-router-dom';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-
+import '../customers.css';
+import '../Menu.css';
 import ContinueDialogue from './ContinueDialogue';
 
-import '../Menu.css';
-import '../customers.css';
+
 
 export default class Dashboard extends React.Component{
   constructor(props)
@@ -21,6 +16,7 @@ export default class Dashboard extends React.Component{
       this.state = {
           user: {},
           boxes: [],
+          avg: [],
           loading: false,
           go: false,
           show: false,
@@ -34,6 +30,7 @@ export default class Dashboard extends React.Component{
   {
     //ReactDOM.findDOMNode(this.refs.divFocus).focus();
     this.getBox()
+    this.getAvg()
   }
 
   componentDidUpdate()
@@ -53,7 +50,7 @@ export default class Dashboard extends React.Component{
     }
 
   render(){
-    const { show, isShown, boxes, boxID} = this.state
+    const { show, isShown, boxes, avg, boxID} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -76,6 +73,13 @@ export default class Dashboard extends React.Component{
             <header className="Menu-header">
             <h1>Box Tracker</h1>
           </header>
+          <div>
+          {avg.map((data, i) => {
+                  return (
+                    <header className="Menu-header">Average Job Completion Time: {data.average_job_length}</header>
+                  )})
+                  }
+          </div>
           <ReactTable
           getTrGroupProps={(state, rowInfo) => {
             if (rowInfo !== undefined) {
@@ -176,6 +180,28 @@ getBox()
             }
             return response;
         });
+}
+
+getAvg()
+{
+  var path = "http://localhost:52773/BoxTracker/stats"  
+  const requestOptions = {
+      method: 'GET',
+      headers: {
+          'content-type': 'application/json',
+          'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+          }
+      };
+  return fetch(path, requestOptions)
+      .then(this.handleGetResponse)
+      .then(response => {
+          if (response) {
+            this.setState({
+                avg : response
+            })
+          }
+          return response;
+      });
 }
 
 handleResponse(response) {

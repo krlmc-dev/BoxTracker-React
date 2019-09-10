@@ -1,10 +1,11 @@
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Route, NavLink, HashRouter} from 'react-router-dom';
-import AddCustomer from './AddCustomer'
-import ViewCustomers from './ViewCustomers'
-import ViewJobs from './ViewJobs';
-import Menu, { Item } from 'rc-menu'
+import { NavLink } from 'react-router-dom';
 import '../Menu.css';
 
 class Home extends React.Component{
@@ -25,9 +26,12 @@ class Home extends React.Component{
     }
 
   render(){
-    
     const { user } = this.state;
-    
+    const classes = makeStyles(theme => ({
+      formControl: {
+        margin: theme.spacing(3),
+      },
+    }));
     return (
       <div>
         <div className="Menu">
@@ -36,21 +40,43 @@ class Home extends React.Component{
             <p>Welcome, {localStorage.getItem("operator_name")}</p>
           </header>
             <div>
-                <p>My Current Workstation</p><br/>
-                <select workstation={localStorage.getItem("Workstation")} onChange={this.handleChange}>
-                  <option Workstation="Preparation">Preparation</option>
-                  <option Workstation="Scanning">Scanning</option>
-                  <option Workstation="Quality Control">Quality Control</option>
-                  <option Workstation="Dispatch">Dispatch</option>
-                </select>
+            <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">Current Workstation</FormLabel>
+        <RadioGroup aria-label="workstations" name="workstations" value={localStorage.getItem("Workstation")} onChange={this.handleChange}>
+          <FormControlLabel
+            value="Preparation"
+            control={<Radio color="primary" />}
+            label="Preparation"
+            labelPlacement="start"
+          />
+          <FormControlLabel
+            value="Scanning"
+            control={<Radio color="primary" />}
+            label="Scanning"
+            labelPlacement="start"
+          />
+          <FormControlLabel
+            value="Quality Control"
+            control={<Radio color="primary" />}
+            label="Quality Control"
+            labelPlacement="start"
+          />
+          <FormControlLabel
+            value="Dispatch"
+            control={<Radio color="primary" />}
+            label="Dispatch"
+            labelPlacement="start"
+          />
+        </RadioGroup>
+      </FormControl>
                 <br/>
                 <br/>
                 <p>Preview Pages</p>
                 <ul className>
-                    <li><NavLink to='/box/7/preparation'>Preparation</NavLink></li>
-                    <li><NavLink to='/box/7/scanning'>Scanning</NavLink></li>
-                    <li><NavLink to='/box/7/Quality Control'>Quality Control</NavLink></li>
-                    <li><NavLink to='/box/7/dispatch'>Dispatch</NavLink></li>
+                    <li><NavLink to='/box/1/preparation'>Preparation</NavLink></li>
+                    <li><NavLink to='/box/1/scanning'>Scanning</NavLink></li>
+                    <li><NavLink to='/box/1/Quality Control'>Quality Control</NavLink></li>
+                    <li><NavLink to='/box/1/dispatch'>Dispatch</NavLink></li>
                     
                 </ul>
             </div>

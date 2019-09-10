@@ -1,16 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
-import { Route, Link, HashRouter} from 'react-router-dom';
 import "react-table/react-table.css";
-import JSONTree from 'react-json-tree'
-
+import '../customers.css';
+import '../Menu.css';
 import ContinueDialogue from './ContinueDialogue';
 
-import '../Menu.css';
-import '../customers.css';
+
 
 export default class Viewbox extends React.Component{
   constructor(props)
@@ -21,6 +16,7 @@ export default class Viewbox extends React.Component{
       this.state = {
           user: {},
           box: [],
+          stats: [],
           loading: false,
           go: false,
           show: false,
@@ -32,8 +28,8 @@ export default class Viewbox extends React.Component{
   }
   componentDidMount()
   {
-    //ReactDOM.findDOMNode(this.refs.divFocus).focus();
     this.getBox(this.props.match.params.id)
+    this.getStats(this.props.match.params.id)
   }
 
   componentDidUpdate()
@@ -53,7 +49,7 @@ export default class Viewbox extends React.Component{
     }
 
   render(){
-    const { show, isShown, box, boxID} = this.state
+    const { show, isShown, box, stats, boxID} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -80,7 +76,7 @@ export default class Viewbox extends React.Component{
           data={box}
           columns={[
             {
-              Header: "Box",
+              Header: "",
               columns: [
                 {
                   Header: "Box ID",
@@ -113,6 +109,49 @@ export default class Viewbox extends React.Component{
                 {
                   Header: "Dispatch",
                   accessor: "job_dispatch"
+                }
+              ]
+            }
+          ]}
+          defaultPageSize={1}
+          showPagination = {false}
+          className="-striped -highlight"
+        >
+           {(state, makeTable, instance) => {
+              return (
+                
+                <div>
+                  {makeTable()}
+                </div>
+              )
+            }}
+          </ReactTable>
+
+          <ReactTable
+          data={stats}
+          columns={[
+            {
+              Header: "Statistics",
+              columns: [
+                {
+                  Header: "Step Name",
+                  accessor: "step_name"
+                },
+                {
+                  Header: "Step Operator",
+                  accessor: "step_operator"
+                },
+                {
+                  Header: "Step Start Time",
+                  accessor: "step_start_time"
+                },
+                {
+                  Header: "Step Finish Time",
+                  accessor: "step_finish_time"
+                },
+                {
+                  Header: "Step Duration",
+                  accessor: "step_duration"
                 }
               ]
             }
@@ -156,6 +195,28 @@ getBox(boxID)
               //alert(JSON.stringify(response))
               this.setState({
                   box : response
+              })
+            }
+            return response;
+        });
+}
+
+getStats(boxID)
+{
+    var path = "http://localhost:52773/BoxTracker/boxes/stats/"+boxID
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            }
+        };
+    return fetch(path, requestOptions)
+        .then(this.handleGetResponse)
+        .then(response => {
+            if (response) {
+              this.setState({
+                  stats : response
               })
             }
             return response;

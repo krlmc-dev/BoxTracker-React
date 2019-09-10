@@ -1,14 +1,57 @@
+import FormControl from '@material-ui/core/FormControl';
+import InputBase from '@material-ui/core/InputBase';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { withRouter } from "react-router";
-import jobService from '../Services/jobService';
-import PropTypes from 'prop-types';
+import '../index.css';
 import '../Menu.css';
-import '../index.css'
 
-const propTypes ={
-  location: PropTypes.object.isRequired
-}
+const BootstrapInput = withStyles(theme => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+}));
 class AddJob extends React.Component{
  
   constructor(props)
@@ -22,7 +65,7 @@ class AddJob extends React.Component{
           customer_name: '',
           numBoxes:'',
           jobLocation:'Loading Dock',
-          jobDispatch:'Archive',
+          jobDispatch:'Archive / Storage',
           submitted: false,
           loading: false
       };
@@ -65,7 +108,7 @@ class AddJob extends React.Component{
 
   render(){
     var path = "/customer/"+this.props.match.params.id
-    const { user, customerID, numBoxes, jobLocation, otherLocation, submitted, loading } = this.state;
+    const { user, customerID, numBoxes, jobLocation, jobDispatch, otherLocation, submitted, loading } = this.state;
     return (
         
         <div className="Menu">
@@ -76,7 +119,7 @@ class AddJob extends React.Component{
             <p>Add New Job</p>
           </header>
           <div className="content">
-          <form name="form" onSubmit={this.handleSubmit}>
+          <form className={useStyles.root} autoComplete="off" onSubmit={this.handleSubmit}>
           <div className={'form-group' + (submitted && !customerID ? ' has-error' : '')}>
               <label htmlFor="numBoxes">Number of Boxes:</label><br/>
               <input
@@ -86,27 +129,31 @@ class AddJob extends React.Component{
                 value={numBoxes}
                 onChange={this.handleChange} />
           </div>
-          <div>
-            Location:<br/>
-            <select jobLocation={this.state.jobLocation} onChange={this.handleChange}>
-              <option jobLocation="Loading Dock">Loading Dock</option>
-              <option jobLocation="Front Door">Front Door</option>
-              <option jobLocation="Staging Area">Staging Area</option>
-            </select>
-          </div>
-          <div>
-            Dispatch Type:<br/>
-            <select jobDispatch={this.state.jobDispatch} onChange={this.handleChange}>
-              <option jobDispatch="Archive">Archive/Storage</option>
-              <option jobDispatch="Destroy">Destroy</option>
-            </select>
-          </div>
-          
+            <FormControl className={useStyles.margin}>
+              <InputLabel htmlFor="location-customized-select">Location</InputLabel>
+              <Select
+                value={jobLocation}
+                onChange={this.handleChange}
+                input={<BootstrapInput name="jobLocation" id="location-customized-select" />}
+              >
+                <MenuItem value={"Loading Dock"}>Loading Dock</MenuItem>
+                <MenuItem value={"Front Door"}>Front Door</MenuItem>
+                <MenuItem value={"Staging Area"}>Staging Area</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className={useStyles.margin}>
+              <InputLabel htmlFor="dispatch-customized-select">Dispatch</InputLabel>
+              <Select
+                value={jobDispatch}
+                onChange={this.handleChange}
+                input={<BootstrapInput name="jobDispatch" id="dispatch-customized-select" />}
+              >
+                <MenuItem value={"Archive / Storage"}>Archive / Storage</MenuItem>
+                <MenuItem value={"Destroy"}>Destroy</MenuItem>
+              </Select>
+            </FormControl>
           <div className="form-group">
-              <button className="btn btn-primary" disabled={loading}>Create</button>
-              {loading &&
-                  <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-              }
+              <button className="btn btn-primary">Create</button>
           </div>
           </form>
           </div>
