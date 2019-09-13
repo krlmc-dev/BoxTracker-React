@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import '../customers.css';
 import '../index.css';
 import '../Menu.css';
@@ -56,13 +59,22 @@ class ViewCustomers extends React.Component{
 
   render(){
     const {  customers } = this.state
+    const { ...rest } = this.props;
     return (
         
         <div className="Menu">
-            <header className="Menu-header">
-            <h1>Box Tracker</h1>
-            <p>View Customers</p>
-          </header>
+            <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar/>
+        <div className="Menu-header">
+          <p>View Customers</p>
+        </div>
           <ReactTable
 
         getTrGroupProps={(state, rowInfo) => {

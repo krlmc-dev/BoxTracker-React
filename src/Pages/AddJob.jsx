@@ -5,6 +5,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import '../index.css';
 import '../Menu.css';
 
@@ -109,11 +112,20 @@ class AddJob extends React.Component{
   render(){
     var path = "/customer/"+this.props.match.params.id
     const { user, customerID, numBoxes, jobLocation, jobDispatch, otherLocation, submitted, loading } = this.state;
+    const { ...rest } = this.props;
     return (
         
         <div className="Menu">
+          <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
           <header className="Menu-header">
-            <h1>Box Tracker</h1>
             <h2>{localStorage.getItem('customer_name') }
             </h2>
             <p>Add New Job</p>

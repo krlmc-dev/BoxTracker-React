@@ -10,7 +10,7 @@ import ContinueDialogue from './ContinueDialogue';
 
 
 
-export default class Viewbox extends React.Component{
+export default class ViewStats extends React.Component{
   constructor(props)
   {
       
@@ -18,8 +18,8 @@ export default class Viewbox extends React.Component{
       this.params = {};
       this.state = {
           user: {},
-          box: [],
-          stats: [],
+          boxes: [],
+          avg: [],
           loading: false,
           go: false,
           show: false,
@@ -31,8 +31,9 @@ export default class Viewbox extends React.Component{
   }
   componentDidMount()
   {
-    this.getBox(this.props.match.params.id)
-    this.getStats(this.props.match.params.id)
+    //ReactDOM.findDOMNode(this.refs.divFocus).focus();
+    this.getBox()
+    this.getAvg()
   }
 
   componentDidUpdate()
@@ -52,7 +53,7 @@ export default class Viewbox extends React.Component{
     }
 
   render(){
-    const { show, isShown, box, stats, boxID} = this.state
+    const { show, isShown, boxes, avg, boxID} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -65,15 +66,15 @@ export default class Viewbox extends React.Component{
         padding: 20,
         overflow: 'auto',
       };
-      const { ...rest } = this.props;
-      return (
-        
+    const { ...rest } = this.props;
+    return (
+        <div>
         <div className="Menu">
           {show && <ContinueDialogue onClick={(e)=>{
             this.setState({show:false})
               alert(e.currentTarget.id)
           }}/>}
-            <Header
+          <Header
                 absolute
                 fixed
                 color="dark"
@@ -81,15 +82,37 @@ export default class Viewbox extends React.Component{
                 rightLinks={<HeaderLinks />}
                 {...rest}
             />
-            <Toolbar/>
-            <div className="Menu-header">
-              <p>Box Statistics</p>
-            </div>
+            <Toolbar />
+          <div>
+          {avg.map((data, i) => {
+                  return (
+                    <div>
+                      <header className="Menu-header">Dashboard</header>
+                      <h2>Average Job Completion Time: {data.average_job_length}</h2>
+                    </div>
+                  )})
+                  }
+          </div>
           <ReactTable
-          data={box}
+          getTrGroupProps={(state, rowInfo) => {
+            if (rowInfo !== undefined) {
+              return {
+                  onClick: () => {
+                    var path = "/dashboard/"+rowInfo.row.box_id
+                    this.props.history.push(path);
+                  },
+                  style: {
+                      cursor: 'pointer',
+                      background: rowInfo.original.id === this.state.selectedIndex ? '#00afec' : 'white',
+                      color: rowInfo.original.id === this.state.selectedIndex ? 'white' : 'black'
+                              }
+                          }
+                    }}
+                }
+          data={boxes}
           columns={[
             {
-              Header: "",
+              Header: "Box",
               columns: [
                 {
                   Header: "Box ID",
@@ -126,49 +149,7 @@ export default class Viewbox extends React.Component{
               ]
             }
           ]}
-          defaultPageSize={1}
-          showPagination = {false}
-          className="-striped -highlight"
-        >
-           {(state, makeTable, instance) => {
-              return (
-                
-                <div>
-                  {makeTable()}
-                </div>
-              )
-            }}
-          </ReactTable>
-
-          <ReactTable
-          data={stats}
-          columns={[
-            {
-              Header: "Statistics",
-              columns: [
-                {
-                  Header: "Step Name",
-                  accessor: "step_name"
-                },
-                {
-                  Header: "Step Operator",
-                  accessor: "step_operator"
-                },
-                {
-                  Header: "Step Start Time",
-                  accessor: "step_start_time"
-                },
-                {
-                  Header: "Step Finish Time",
-                  accessor: "step_finish_time"
-                },
-                {
-                  Header: "Step Duration",
-                  accessor: "step_duration"
-                }
-              ]
-            }
-          ]}
+          filterable
           defaultPageSize={10}
           className="-striped -highlight"
         >
@@ -182,16 +163,17 @@ export default class Viewbox extends React.Component{
             }}
           </ReactTable>
         </div>
+        </div>
       );
     }
 ///
 /// HTTP GET/POST METHODS
 ///
-getBox(boxID)
+getBox()
 {
     //alert(boxID)
     //boxID = 6
-    var path = "http://localhost:52773/BoxTracker/boxes/"+boxID
+    var path = "http://localhost:52773/BoxTracker/boxes"
     //TEMPORARY
     //jobID = "1"
     const requestOptions = {
@@ -207,33 +189,33 @@ getBox(boxID)
             if (response) {
               //alert(JSON.stringify(response))
               this.setState({
-                  box : response
+                  boxes : response
               })
             }
             return response;
         });
 }
 
-getStats(boxID)
+getAvg()
 {
-    var path = "http://localhost:52773/BoxTracker/boxes/stats/"+boxID
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'content-type': 'application/json',
-            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
-            }
-        };
-    return fetch(path, requestOptions)
-        .then(this.handleGetResponse)
-        .then(response => {
-            if (response) {
-              this.setState({
-                  stats : response
-              })
-            }
-            return response;
-        });
+  var path = "http://localhost:52773/BoxTracker/stats"  
+  const requestOptions = {
+      method: 'GET',
+      headers: {
+          'content-type': 'application/json',
+          'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+          }
+      };
+  return fetch(path, requestOptions)
+      .then(this.handleGetResponse)
+      .then(response => {
+          if (response) {
+            this.setState({
+                avg : response
+            })
+          }
+          return response;
+      });
 }
 
 handleResponse(response) {

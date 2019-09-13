@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactTable from 'react-table';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import "react-table/react-table.css";
 import '../customers.css';
 import '../Menu.css';
@@ -70,14 +73,21 @@ export default class Scanning extends React.Component{
         padding: 20,
         overflow: 'auto',
       };
-    
+      const { ...rest } = this.props;
     return (
-        
         <div className="MenuScan">
-            <header className="Menu-header">
-            <h1>Box Tracker</h1>
-            <p>Scanning</p>
-          </header>
+            <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
+            <div className="Menu-header">
+              <p>Scanning</p>
+            </div>
           <ReactTable 
           data={vBox}
           columns={[

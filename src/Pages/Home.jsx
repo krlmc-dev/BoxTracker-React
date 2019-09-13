@@ -4,8 +4,12 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles } from '@material-ui/core/styles';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import NavBar from '../Components/NavBar'
 import '../Menu.css';
 
 class Home extends React.Component{
@@ -32,14 +36,24 @@ class Home extends React.Component{
         margin: theme.spacing(3),
       },
     }));
+    const { ...rest } = this.props;
     return (
       <div>
         <div className="Menu">
+        <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
           <header className="Menu-header">
-            <h1>Box Tracker</h1>
             <p>Welcome, {localStorage.getItem("operator_name")}</p>
           </header>
             <div>
+              <br/>
             <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">Current Workstation</FormLabel>
         <RadioGroup aria-label="workstations" name="workstations" value={localStorage.getItem("Workstation")} onChange={this.handleChange}>

@@ -1,6 +1,9 @@
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import ReactTable from 'react-table';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import "react-table/react-table.css";
 import '../customers.css';
 import '../Menu.css';
@@ -17,6 +20,7 @@ class ScanBarcode extends React.Component{
       this.state = {
           user: {},
           box: [],
+          boxes: [],
           loading: false,
           go: false,
           show: false,
@@ -29,6 +33,7 @@ class ScanBarcode extends React.Component{
   componentDidMount()
   {
     //ReactDOM.findDOMNode(this.refs.divFocus).focus();
+    //this.getBoxes()
   }
 
   componentDidUpdate()
@@ -74,7 +79,7 @@ class ScanBarcode extends React.Component{
   }
 
   render(){
-    const { show, isShown, box, boxID} = this.state
+    const { show, isShown, box, boxes, boxID} = this.state
     var menuStyle = {
       margin: 'auto',
       padding: 40,
@@ -87,6 +92,7 @@ class ScanBarcode extends React.Component{
         padding: 20,
         overflow: 'auto',
       };
+    const { ...rest } = this.props;
     return (
         
         <div className="Menu">
@@ -94,12 +100,21 @@ class ScanBarcode extends React.Component{
             this.setState({show:false})
               alert(e.currentTarget.id)
           }}/>}
+            <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
             <header className="Menu-header">
-            <h1>Box Tracker</h1>
+            <p>Scan Barcode</p>
           </header>
           <form onSubmit={this.handleSubmit}>
            <br/>
-           <label for="barcode-input">Scan Barcode</label>
+           <label for="barcode-input">Barcode</label>
             <TextField autoFocus  value={this.state.value} onChange={this.handleChange} />
           </form>
           <ReactTable
@@ -107,7 +122,7 @@ class ScanBarcode extends React.Component{
             if (rowInfo !== undefined) {
               return {
                   onClick: () => {
-                    var path = "/box/"+rowInfo.row.box_id
+                    var path = "/dashboard/"+rowInfo.row.box_id
                     this.props.history.push(path);
                   },
                   style: {
@@ -118,7 +133,7 @@ class ScanBarcode extends React.Component{
                           }
                     }}
                 }
-          data={box}
+          data={boxes}
           columns={[
             {
               Header: "Box",
@@ -158,6 +173,7 @@ class ScanBarcode extends React.Component{
               ]
             }
           ]}
+          filterable
           defaultPageSize={10}
           className="-striped -highlight"
         >
@@ -198,6 +214,33 @@ getBox(boxID)
               //alert(JSON.stringify(response))
               this.setState({
                   box : response
+              })
+            }
+            return response;
+        });
+}
+
+getBoxes()
+{
+    //alert(boxID)
+    //boxID = 6
+    var path = "http://localhost:52773/BoxTracker/boxes"
+    //TEMPORARY
+    //jobID = "1"
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            'authorization':'Basic U3VwZXJVc2VyOlBBU1M=',
+            }
+        };
+    return fetch(path, requestOptions)
+        .then(this.handleGetResponse)
+        .then(response => {
+            if (response) {
+              //alert(JSON.stringify(response))
+              this.setState({
+                  boxes : response
               })
             }
             return response;

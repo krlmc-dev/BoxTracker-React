@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactTable from 'react-table';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import "react-table/react-table.css";
 import '../customers.css';
 import '../Menu.css';
@@ -67,12 +70,23 @@ class ViewCustomer extends React.Component{
         padding: 20,
         overflow: 'auto',
       };
-    
+      const { ...rest } = this.props;
     return (
         
         <div className="Menu">
-            <header className="Menu-header">
-            <h1>Box Tracker</h1>
+            <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+        
+        <Toolbar />
+        <div className="Menu-header">
+          <p>View Customer</p>
+        </div>
             <div className = 'content'>
               {customer.map((data, i) => {
                   return (
@@ -92,7 +106,6 @@ class ViewCustomer extends React.Component{
                   )})
                   }
               </div>
-          </header>
           
 
           <ReactTable
@@ -140,8 +153,7 @@ class ViewCustomer extends React.Component{
             }}
             
           </ReactTable>
-          
-        </div>
+          </div>
       );
     }
 ///

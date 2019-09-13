@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, NavLink, HashRouter} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute'
+
 import Home from './Pages/Home';
 import AddCustomer from './Pages/AddCustomer';
 import ViewCustomers from './Pages/ViewCustomers';
@@ -35,9 +36,9 @@ class App extends React.Component {
         return (
             <div >
             <HashRouter>
+                {/*
                 <ul className = "header">
                     <li><NavLink exact to='/'>Home</NavLink></li>
-                    {/*<li><NavLink to='/tasks'>Tasks</NavLink></li>*/}
                     <li><NavLink to='/box'>Box</NavLink></li>
                     <li><NavLink to='/addcustomer'>Add Customer</NavLink></li>
                     <li><NavLink to='/customers'>View Customers</NavLink></li>
@@ -45,6 +46,7 @@ class App extends React.Component {
                     <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
                     <li><NavLink to='/logout'>Log Out</NavLink></li>
                 </ul>
+                */}
                 <div>
                         <PrivateRoute exact path="/" component={Home} />
                         <Route path="/login" component={LoginForm} />
@@ -63,7 +65,7 @@ class App extends React.Component {
                         <PrivateRoute exact path="/box/:id/Quality Control" component={QualityControl}/>
                         <PrivateRoute exact path="/box/:id/dispatch" component={Dispatch}/>
                         <PrivateRoute exact path="/dashboard" component={Dashboard}/>
-                        <PrivateRoute path="/dashboard/:id" component={ViewBox}/>
+                        <PrivateRoute exact path="/dashboard/:id" component={ViewBox}/>
                         
                 </div>
             </HashRouter>

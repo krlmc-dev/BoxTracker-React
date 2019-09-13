@@ -1,6 +1,10 @@
 import React from 'react';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 //import userService from '../Services/userService';
 import '../App.css';
+import '../Menu.css';
 
 
 class LoginForm extends React.Component {
@@ -54,10 +58,22 @@ handleSubmit(e)
   render()
   {
     const { username, password, submitted, loading, error } = this.state;
+    const { ...rest } = this.props;
     return (
       <div className="App">
-        <header className="App-header">
-        <h1>Box Tracker Login</h1>        
+        
+        <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
+            <header className="Menu-header">
+          <p>Log In</p>
+        </header>
         <form name="form" onSubmit={this.handleSubmit}>
           <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
               <label htmlFor="username">Username</label>
@@ -84,7 +100,6 @@ handleSubmit(e)
               }
           </div>
           </form>
-        </header>
       </div>
     );
   }

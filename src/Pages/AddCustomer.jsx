@@ -1,4 +1,7 @@
 import React from 'react';
+import Header from "./../Components/Headers/Header";
+import HeaderLinks from "./../Components/Headers/HeaderLinks";
+import Toolbar from "@material-ui/core/Toolbar";
 import '../index.css';
 import '../Menu.css';
 
@@ -52,10 +55,19 @@ class AddCustomer extends React.Component{
   
   render(){
     const { user, customer_name,customer_email, submitted, loading } = this.state;
+    const { ...rest } = this.props;
     return (
         <div className="Menu">
+          <Header
+                absolute
+                fixed
+                color="dark"
+                brand="Box Tracker"
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
+            <Toolbar />
           <header className="Menu-header">
-            <h1>Box Tracker</h1>
             <p>Add New Customer</p>
           </header>
           <div className="content">
