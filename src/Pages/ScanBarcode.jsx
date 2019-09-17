@@ -173,7 +173,6 @@ class ScanBarcode extends React.Component{
               ]
             }
           ]}
-          filterable
           defaultPageSize={10}
           className="-striped -highlight"
         >
