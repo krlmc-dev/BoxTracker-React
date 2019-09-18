@@ -5,11 +5,15 @@
   "proxy": "http://localhost:52773",
   "dependencies": {
     "@material-ui/core": "^4.4.0",
+    "@material-ui/icons": "^4.4.1",
     "iris-app": "^0.2.0",
     "material-ui": "^0.20.2",
+    "mdbreact": "^4.19.2",
     "rc-menu": "^7.4.23",
     "react": "^16.9.0",
+    "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.9.0",
+    "react-google-charts": "^3.0.15",
     "react-json-pretty": "^2.1.0",
     "react-json-table": "^0.1.1",
     "react-json-to-table": "^0.1.5",
@@ -19,6 +23,7 @@
     "react-scripts": "3.1.1",
     "react-scroll-list": "^1.0.3",
     "react-table": "^6.10.0",
+    "recharts": "^1.7.1",
     "styled-components": "^4.3.2"
   },
   "scripts": {
