@@ -1,5 +1,6 @@
-# boxtrackerwebbapp
- 
- IDE: Visual Studio Code
- TO start the webserver, open Command Prompt, navigate to the folder containing the BoxTracker-React application,
- i.e. C:\Users\<user>\Documents\BoxTracker-React and type the command 'npm start'
+# BoxTrackerWebApp
+React Front-End for BoxTracker Application
+## Setup
+1: Download the files
+2: Open Command Prompt in the folder you just downloaded.
+3: Type 'npm start'
