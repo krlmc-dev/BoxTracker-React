@@ -174,8 +174,6 @@ export default class Dashboard extends React.Component {
                     <Tooltip />
                     <Legend />
                     {operatorList.map((data, i) => { return (<Bar dataKey={data} fill={colors[i]} />) })}
-                    {//alert(perStep)
-                    }
 
                   </BarChart>
                 </Grid>
